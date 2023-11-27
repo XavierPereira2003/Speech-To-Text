@@ -1,1 +1,1 @@
-/home/deon-xavier-pereira/Desktop/Project/NNDL
+conda activate /home/deon-xavier-pereira/Desktop/Project/NNDL/nndl_env
