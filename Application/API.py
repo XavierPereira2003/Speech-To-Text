@@ -6,14 +6,6 @@ from transformers import Wav2Vec2ForCTC,Wav2Vec2Tokenizer
 import evaluate
 nltk.download('punkt')
 
-def load_model():
-    """
-    Returns the Wav2Vec2 tokienizer and the model from pretrained tokinezer model
-    """
-    tokienizer=Wav2Vec2Tokenizer.from_pretrained('facebook/wav2vec2-base-960h')
-    model=Wav2Vec2ForCTC.from_pretrained("facebook/wav2vec2-base-960h")
-    return tokienizer, model
-
 def Correction(input_text:str):
     """
     Returns the input text with correction
@@ -24,15 +16,16 @@ def Correction(input_text:str):
     sentence=nltk.sent_tokenize(input_text)
     return (" ".join([s.replace(s[0],s[0].capitalize(),1) for s in sentence]))
 
-def transcribe(tokenizer,model,input_file):
+def transcribe(input_file):
     """
     Returns the transcribe text of the audio
 
     Args:
-        tokiener (_type_): _description_
-        model (_type_): _description_
+
         input_file (_type_): _description_
     """
+    tokenizer=Wav2Vec2Tokenizer.from_pretrained('facebook/wav2vec2-base-960h')
+    model=Wav2Vec2ForCTC.from_pretrained("facebook/wav2vec2-base-960h")
 
     speech, sample_rate=sf.read(input_file)
 
