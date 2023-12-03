@@ -1,39 +1,54 @@
 {% extends 'base.html' %}
 
-{% block title %}Image Upscaler{% endblock %}
-
-{% block nav %}
-<li class="nav-item active">
-  <a class="nav-link" href="{{ url_for('index') }}">Home</a>
-</li>
-{% endblock %}
+{% block title %}
+    Home
+{% endblock title %}
 
 {% block body %}
-<div class="container mt-5">
-  <div class="row justify-content-center">
-    <div class="col-md-8">
-      <br>
-      <h1 class="text-center mb-4">Welcome to the Image Upscaler!</h1>
-
-      <form action="{{ url_for('process_upload') }}" method="post" enctype="multipart/form-data">
-        <div class="mb-3">
-          <label for="formFile" class="form-label">Choose Image to Process:</label>
-          <input class="form-control" type="file" id="formFile" name="file">
+    <div class="container-fluid gradient-background">
+        <div class="jumbotron text-center text-dark">
+            <h1 class="display-4">Speech to Text</h1>
+            <p class="lead">Upload an audio file and get the transcribed text.</p>
+            <form id="uploadForm" action="{{ url_for('index') }}" method="post" enctype="multipart/form-data" class="upload-section">
+                <div class="mb-3">
+                    <label for="audioFile" class="form-label">Choose an audio file</label>
+                    <input type="file" class="form-control" id="audioFile" name="audioFile" accept="">
+                </div>
+                <button type="button" class="btn btn-primary btn-lg" onclick="validateForm()">Transcribe</button>
+            </form>
         </div>
-        <button type="submit" class="btn btn-primary">Upload and Process</button>
-      </form>
-
-      {% if original_image_url and processed_image_url %}
-      <div class="mt-5 text-center">
-        <h2 class="mb-4">Original Image</h2>
-        <img src="{{ original_image_url }}" alt="Original Image" class="img-fluid rounded mx-auto d-block">
-
-        <h2 class="mt-4">Processed Image</h2>
-        <img src="{{ processed_image_url }}" alt="Upscaled Image" class="img-fluid rounded mx-auto d-block">
-      </div>
-      {% endif %}
-
     </div>
-  </div>
-</div>
+
+    {% if transcription %}
+        <div class="container mt-5">
+            <div class="card text-center transcription-card">
+                <div class="card-body">
+                    <h3 class="card-title">Transcription:</h3>
+                    <p class="card-text">{{ transcription }}</p>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    <script>
+      function validateForm() {
+          var fileInput = document.getElementById('audioFile');
+          var file = fileInput.files[0];
+  
+          if (!file) {
+              alert('Please select a file before transcribing.');
+          } else {
+              var allowedExtensions = ['wav', 'mp3', 'flac'];
+              var fileExtension = file.name.slice((file.name.lastIndexOf(".") - 1 >>> 0) + 2).toLowerCase();
+  
+              if (allowedExtensions.indexOf(fileExtension) === -1) {
+                  alert('Please upload a valid audio file (supported formats: .wav, .mp3, .flac).');
+              } else {
+                  document.getElementById('uploadForm').submit();
+              }
+          }
+      }
+  </script>
+  
+  
 {% endblock %}
